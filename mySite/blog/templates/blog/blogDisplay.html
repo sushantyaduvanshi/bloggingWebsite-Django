@@ -57,7 +57,7 @@
 
         {% if i.aproved or user.is_superuser or i.post.authorName == user%}
           <p>
-            <span id="commentInfo">On {{ i.created_date }}, by {{ i.authorName }}</span><br>
+            <span class="Info">On {{ i.created_date }}, by {{ i.authorName }}</span><br>
             {{ i.content }}
             {% if blog.authorName == user or user.is_superuser %}
               {% if not i.aproved %}

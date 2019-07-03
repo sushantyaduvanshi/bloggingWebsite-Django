@@ -22,3 +22,14 @@
 p{
   font-size: 1.2rem;
 }
+.blogLink{
+  color: #032A3B;
+  text-decoration: none;
+}
+.blogLink:hover{
+  color: #c2e6ff;
+  text-decoration: none;
+}
+.Info{
+  font-size: .8rem;
+}

@@ -3,14 +3,14 @@
 {% load myTags %}
 
   {% block body_block %}
-    <br><br>
+    <br><br><br>
     {% for i in blogList reversed %}
 
       {% if user.is_superuser %}
 
         {% if i.published_date == None %}
-          <h2><a href="{% url 'blog:blogDisplayPage' pk=i.id %}">{{ i.title | title }}</a></h2>
-          <p>
+          <h2><a class="blogLink" href="{% url 'blog:blogDisplayPage' pk=i.id %}">{{ i.title | title }}</a></h2>
+          <p class="Info">
             <strong>Published On : </strong>{{ i.published_date }}<br>
             <strong>Comments : </strong>{{ i.comments.all | customFilter | length }}
           </p>
@@ -20,8 +20,8 @@
       {% else %}
 
         {% if i.published_date == None and i.authorName == user %}
-          <h2><a href="{% url 'blog:blogDisplayPage' pk=i.id %}">{{ i.title | title }}</a></h2>
-          <p>
+          <h2><a class="blogLink" href="{% url 'blog:blogDisplayPage' pk=i.id %}">{{ i.title | title }}</a></h2>
+          <p class="Info">
             <strong>Published On : </strong>{{ i.published_date }}<br>
             <strong>Comments : </strong>{{ i.comments.all | customFilter | length }}
           </p>

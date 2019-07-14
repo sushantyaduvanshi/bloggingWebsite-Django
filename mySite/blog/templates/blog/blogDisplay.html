@@ -6,7 +6,7 @@
 
 
       <div class="jumbotron bg-light-blue text-center">
-        <h2 class="white">{{ blog.title }}</h2>
+        <h2 class="display-3 white">{{ blog.title | title }}</h2>
       </div>
       <p>
         <span class="dark-blue">Posted By : {{ blog.authorName }}</span><br>
@@ -22,18 +22,17 @@
         {% if user.is_authenticated %}
           {% if user.is_superuser and blog.published_date == None %}
             <div class="col-lg-2">
+              <a class="btn btn-info btn-block" id="edit" href="{% url 'blog:blogUpdatePage' pk=blog.id %}">Edit</a>
+            </div>
+            <div class="col-lg-2">
               <a class="btn btn-block btn-info" id="publish" href="{% url 'blog:publishBlogPage' pk=blog.id %}">Publish</a>
             </div>
-            <div class="col-lg-8"></div>
-            <div class="col-lg-2">
-              <a class="btn btn-block btn-danger" id="delete" href="{% url 'blog:blogDeletePage' pk=blog.id %}">Delete</a>
-            </div>
-          {% elif user.is_superuser %}
+            <div class="col-lg-6"></div>
             <div class="col-lg-2">
               <a class="btn btn-block btn-danger" id="delete" href="{% url 'blog:blogDeletePage' pk=blog.id %}">Delete</a>
             </div>
           {% else %}
-            {% if blog.authorName == user %}
+            {% if blog.authorName == user or user.is_superuser %}
               <div class="col-lg-2">
                 <a class="btn btn-info btn-block" id="edit" href="{% url 'blog:blogUpdatePage' pk=blog.id %}">Edit</a>
               </div>

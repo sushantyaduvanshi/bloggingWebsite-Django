@@ -97,26 +97,24 @@ def createBlog(request):
         return HttpResponseRedirect(reverse('blog:loginPage'))
 
 
-# class displayBlog(DetailView):
-#     model = Blog
-#     template_name = 'blog/blogDisplay.html'
-#     context_object_name = 'blog'
-
 
 def displayBlog(request, pk):
     blog = Blog.objects.get(pk=pk)
     if(blog.published_date!=None or request.user.is_superuser or request.user==blog.authorName):
         commentForm = forms.createComment()
         if(request.method == 'POST'):
-            commentForm = forms.createComment(request.POST)
-            if(commentForm.is_valid()):
-                comment = commentForm.save(commit=False)
-                comment.authorName = request.user
-                comment.post = blog
-                comment.save()
-                return HttpResponseRedirect(reverse('blog:blogDisplayPage', kwargs={'pk':pk}))
+            if(request.user.is_authenticated):
+                commentForm = forms.createComment(request.POST)
+                if(commentForm.is_valid()):
+                    comment = commentForm.save(commit=False)
+                    comment.authorName = request.user
+                    comment.post = blog
+                    comment.save()
+                    return HttpResponseRedirect(reverse('blog:blogDisplayPage', kwargs={'pk':pk}))
+                else:
+                    return HttpResponse(form.errors)
             else:
-                return HttpResponse(form.errors)
+                return HttpResponseRedirect(reverse('blog:loginPage'))
         else:
             return render(request, 'blog/blogDisplay.html', {'blog':blog,'commentForm':commentForm})
     else:
@@ -182,12 +180,3 @@ class deleteComment(DeleteView):
             return super().post(request, *args, **kwargs)
         else:
             raise Http404('Page not found')
-
-    # def get(self, request, pk, *args, **kwargs):
-    #     self.pk = pk
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     print(pk)
-    #     context['pk'] = pk
-    #     return context

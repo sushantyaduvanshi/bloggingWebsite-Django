@@ -41,44 +41,10 @@ class userDraftList(ListView):
     context_object_name = 'blogList'
 
 
-
-def userCreate(request):
-    form = forms.registrationForm()
-
-    if(request.method == 'POST'):
-        form = forms.registrationForm(request.POST)
-        if(form.is_valid):
-            print('validddddddd\n\n\n\n')
-            user = form.save(commit=False)
-            user.set_password(user.password)
-            user.save()
-            return HttpResponseRedirect(reverse('blog:loginPage'))
-        else:
-            return HttpResponse(user.errors)
-    else:
-        return render(request, 'blog/userRegister.html', {'form':form})
-
-
-def userLogin(request):
-    if(request.method == 'POST'):
-        Username = request.POST.get('username')
-        Pass = request.POST.get('password')
-        user = authenticate(username=Username, password=Pass)
-        print('\n'+ str(request) +'\n')
-        if(user):
-            if(user.is_active):
-                login(request,user)
-                return HttpResponseRedirect(reverse('blog:userBlogListPage'))
-        else:
-            return HttpResponse('Invalid User or Password')
-    else:
-        return render(request, 'blog/login.html')
-
-
-@login_required
-def userLogout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('blog:loginPage'))
+class userCreate(CreateView):
+    form_class = forms.registrationForm
+    template_name = 'blog/userRegister.html'
+    success_url = reverse_lazy('blog:loginPage')
 
 
 @login_required

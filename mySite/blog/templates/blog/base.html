@@ -49,11 +49,7 @@
           <a href="{% url 'blog:userDraftListPage' %}">Drafts </a>
           <span> | </span>
           {% endif %}
-          {% if user.is_authenticated %}
           <a href="{% url 'blog:blogCreatePage' %}">WriteBlog </a>
-          {% else %}
-          <a href="{% url 'blog:loginPage' %}">WriteBlog </a>
-          {% endif %}
           <span> | </span>
           {% if user.is_authenticated %}
           <a href="{% url 'blog:logoutPage' %}">Logout </a>

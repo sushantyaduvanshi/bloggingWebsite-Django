@@ -25,6 +25,8 @@ class blogList(ListView):
     context_object_name = 'blogList'
 
 
+# login_url is defined in settings.py
+# via with django redirect to loginPage when login_required failed
 @method_decorator(login_required, name='dispatch')
 class userBlogList(ListView):
     model = Blog
@@ -62,7 +64,7 @@ def userLogin(request):
         Username = request.POST.get('username')
         Pass = request.POST.get('password')
         user = authenticate(username=Username, password=Pass)
-        print('\nhello : ',str(user),'\n')
+        print('\n'+ str(request) +'\n')
         if(user):
             if(user.is_active):
                 login(request,user)
@@ -79,23 +81,20 @@ def userLogout(request):
     return HttpResponseRedirect(reverse('blog:loginPage'))
 
 
+@login_required
 def createBlog(request):
-    if(request.user.is_authenticated):
-        form = forms.createBlogForm()
-        if(request.method == 'POST'):
-            form = forms.createBlogForm(request.POST)
-            if(form.is_valid()):
-                blog = form.save(commit=False)
-                blog.authorName = User.objects.get(id=request.POST.get('authorName'))
-                blog.save()
-                return HttpResponseRedirect(reverse('blog:userDraftListPage'))
-            else:
-                return HttpResponse(user.errors)
+    form = forms.createBlogForm()
+    if(request.method == 'POST'):
+        form = forms.createBlogForm(request.POST)
+        if(form.is_valid()):
+            blog = form.save(commit=False)
+            blog.authorName = User.objects.get(id=request.POST.get('authorName'))
+            blog.save()
+            return HttpResponseRedirect(reverse('blog:userDraftListPage'))
         else:
-            return render(request, 'blog/blogCreate.html', {'form':form})
+            return HttpResponse(user.errors)
     else:
-        return HttpResponseRedirect(reverse('blog:loginPage'))
-
+        return render(request, 'blog/blogCreate.html', {'form':form})
 
 
 def displayBlog(request, pk):
